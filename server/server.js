@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json("Trial response from server");
@@ -43,18 +44,17 @@ app.get("/posts/:id", (req, res) => {
 });
 
 app.post("/posts", (req, res) => {
+  debugger;
   const post = {
-    userId: req.body.userId,
+    userId: req.body?.userId,
     id: posts.length + 1,
-    title: req.body.title,
-    content: req.body.content,
+    title: req.body?.title,
+    content: req.body?.content,
   };
 
   posts.push(post);
   res.send(posts);
 });
-
-app.post("./");
 
 const port = process.env.PORT || 8081;
 app.listen(port, () => console.log("Server started at port " + port));
