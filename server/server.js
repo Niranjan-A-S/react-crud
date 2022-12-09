@@ -9,7 +9,8 @@ app.get("/", (req, res) => {
   res.json("Trial response from server");
 });
 
-let posts = [
+//data
+const posts = [
   {
     userId: 1,
     id: 1,
@@ -34,25 +35,46 @@ let posts = [
   },
 ];
 
+//get request for all the posts
 app.get("/posts", (req, res) => {
   res.json(posts);
 });
 
+//get request for a particular post
 app.get("/posts/:id", (req, res) => {
   const post = posts.find((post) => post.id === +req.params.id);
   post ? res.send(post) : res.status(404).json("Error 404 Page not Found");
 });
 
+//creating a new post
 app.post("/posts", (req, res) => {
   debugger;
   const post = {
-    userId: req.body?.userId,
+    userId: req.body.userId,
     id: posts.length + 1,
-    title: req.body?.title,
-    content: req.body?.content,
+    title: req.body.title,
+    content: req.body.content,
   };
 
   posts.push(post);
+  res.send(post);
+});
+
+app.put("/posts/:id", (req, res) => {
+  const post = posts.find((post) => post.id === +req.params.id);
+  post
+    ? (post.title = "Updated Post" + req.body.title)
+    : res.status(404).send("Error 404 Page not found");
+
+  res.send(post);
+});
+
+app.delete("/posts/:id", (req, res) => {
+  const post = posts.find((post) => post.id === +req.params.id);
+
+  !post && res.status(404).send("Error 404 Page not found");
+
+  posts.splice(posts.indexOf(post));
   res.send(posts);
 });
 
